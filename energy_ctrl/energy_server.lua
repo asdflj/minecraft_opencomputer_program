@@ -153,16 +153,16 @@ end
 
 function Draw()
 gpu.setBackground(black)
-gpu.set(screen_x-8,6,'        ')
+gpu.set(screen_x-8,6,'          ')
 gpu.set(screen_x-8,6,_G.energy[1]..'M')
 local a=string.format("%0.2f",1/((screen_y-10)/8))
 for i=1,(screen_y-10)/8-1 do
 
 local b=string.format("%0.2f", _G.energy[1]*(a*i))
-gpu.set(screen_x-8,screen_y-4-8*i,'     ')
+gpu.set(screen_x-8,screen_y-4-8*i,'          ')
 gpu.set(screen_x-8,screen_y-4-8*i,b..'M')
 end
-gpu.set(screen_x-8,screen_y-4,'        ')
+gpu.set(screen_x-8,screen_y-4,'          ')
 gpu.set(screen_x-8,screen_y-4,'0M')
 end
 
