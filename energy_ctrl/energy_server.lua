@@ -83,6 +83,7 @@ end
 
 function bat_out_stuta()
 while true do
+
 for k,v in pairs(bat) do
 a=component.proxy(v)
 _G.now_energy=_G.now_energy+a.getEnergy()
@@ -99,9 +100,10 @@ for k,v in pairs(mfsu) do
 a=component.proxy(v)
 _G.now_energy=_G.now_energy+a.getEnergy()
 end
-
+_G.now_energy1=_G.now_energy
 _G.now_energy=string.format("%0.2f", _G.now_energy/1000000)
 i=(screen_y-10)*(_G.now_energy/_G.energy[1])
+
 for k,v in pairs(_G.energy.log_percentage) do
 local ii=k
 end
@@ -110,15 +112,26 @@ ii=1
 end
 if ii>screen_y-10 then 
 table.remove(_G.energy.log_percentage)
+table.remove(_G.t)
+table.remove(_G.energy.msg)
 end
+table.insert(_G.t,1,computer.uptime())
 table.insert(_G.energy.log_percentage,1,i)
+table.insert(_G.energy.msg,1,_G.now_energy1)
 gpu.fill(1,6,screen_x-12,screen_y-9,' ')--竖
 gpu.setBackground(red)
 for k,v in pairs(_G.energy.log_percentage)do
 gpu.set(screen_x-11-k,screen_y-4-_G.energy.log_percentage[k],' ')
 end
-os.sleep(1)
 gpu.setBackground(black)
+gpu.set(2,screen_y,'当前能源百分比:'..string.format("%0.1f",_G.now_energy/_G.energy[1]*100)..'%'..'    ')
+if _G.energy.log_percentage[2] ~= nil then
+local eu =string.format("%0.0f",(_G.energy.msg[1]-_G.energy.msg[2]))
+--local s=math.ceil(_G.t[1])-math.floor(_G.t[2])
+local s=(_G.t[1]-_G.t[2])*20
+gpu.set(2,screen_y-1,'当前能源状態:'..string.format("%0.0f",eu/s)..'eu/t'..'           ')
+end
+os.sleep(1)
 end
 end
 
@@ -171,6 +184,8 @@ print('開始註冊服務')
 if event.listen('Draw',Draw) then
 _G.now_energy=0
 _G.end_id={}
+_G.t={}
+_G.energy.msg={}
 _G.energy.log_x={}
 _G.energy.log_y={}
 _G.energy.log_percentage={}
