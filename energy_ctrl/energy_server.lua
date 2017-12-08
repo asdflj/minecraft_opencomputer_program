@@ -86,19 +86,27 @@ while true do
 
 for k,v in pairs(bat) do
 local a=component.proxy(v)
+if  a ~= nil then 
 _G.now_energy=_G.now_energy+a.getEnergy()
+end
 end
 for k,v in pairs(cesu) do
 local a=component.proxy(v)
+if  a ~= nil then 
 _G.now_energy=_G.now_energy+a.getEnergy()
+end
 end
 for k,v in pairs(mfe) do
 local a=component.proxy(v)
+if  a ~= nil then 
 _G.now_energy=_G.now_energy+a.getEnergy()
+end
 end
 for k,v in pairs(mfsu) do
 local a=component.proxy(v)
+if  a ~= nil then 
 _G.now_energy=_G.now_energy+a.getEnergy()
+end
 end
 local now_energy1=_G.now_energy
 _G.now_energy=string.format("%0.2f", _G.now_energy/1000000)
