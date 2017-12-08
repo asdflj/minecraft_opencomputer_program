@@ -47,7 +47,17 @@ local function frame_down()
     gpu.set(screen_x-46,screen_y," 聯網控制 ")
 	end
 	end
-	
+local function Manual (swich)
+_G.auto=0
+_G.send[1]=swich
+gpu.setForeground(white)
+gpu.setBackground(green)
+gpu.set(screen_x-34,screen_y," 自動控制 ")
+gpu.setBackground(black)
+gpu.set(screen_x-10,screen_y-2,'          ')
+computer.pushSignal('auto')
+computer.pushSignal('send')
+end	
 
 
 
@@ -91,28 +101,10 @@ return
 end
 
 if mouse_x >= screen_x-10 and mouse_y == screen_y then
-_G.auto=0
-_G.send[1]='關閉'
-gpu.setForeground(white)
-gpu.setBackground(green)
-gpu.set(screen_x-34,screen_y," 自動控制 ")
-gpu.setBackground(black)
-gpu.set(screen_x-10,screen_y-2,'         ')
-gpu.set(screen_x-10,screen_y-2,'         ')
-computer.pushSignal('auto')
-computer.pushSignal('send')
+Manual ('關閉')
 end
 if mouse_x >= screen_x-22 and mouse_x <= screen_x-12 and mouse_y == screen_y then
-_G.auto=0
-_G.send[1]='打開'
-gpu.setForeground(white)
-gpu.setBackground(green)
-gpu.set(screen_x-34,screen_y," 自動控制 ")
-gpu.setBackground(black)
-gpu.set(screen_x-10,screen_y-2,'         ')
-gpu.set(screen_x-10,screen_y-2,'         ')
-computer.pushSignal('auto')
-computer.pushSignal('send')
+Manual ('打開')
 end
 if mouse_x >= screen_x-34 and mouse_x <= screen_x-24 and mouse_y == screen_y then --自动控制
 if _G.auto==0 then
@@ -120,28 +112,41 @@ gpu.setBackground(green)
 gpu.setForeground(red)
 gpu.set(screen_x-34,screen_y," 自動控制 ")
 gpu.setForeground(white)
-gpu.set(screen_x-10,screen_y-2,'切換:'.._G.energy_value[1]..'M')
+gpu.set(screen_x-10,screen_y-2,'切換:'.._G.energy_value..'M')
 _G.auto=1
+gpu.setBackground(black)
 computer.pushSignal('auto')
 computer.pushSignal('send')
 end
 end
---[[if _G.auto==1 then
-if mouse_x >= screen_x-10 and mouse_y == screen_y-3  then
-term.read()
-centerF(screen_y/2,  "请输入 单位M",red)
+if _G.auto==1 then
+if mouse_x >= screen_x-10 and mouse_y == screen_y-2  then
+_G.thread1:suspend()
+centerF(screen_y/2,  "請輸入 單位M",red)
+term.setCursor(screen_x/2,screen_y/2+1)
 while true do
+term.setCursor(screen_x/2,screen_y/2+1)
 e_vlaue=term.read()
 if tonumber(e_vlaue)==nil then
-centerF(screen_y/2+2,  "输入错误",red)
+centerF(screen_y/2+2,  "輸入錯誤",red)
 else
 _G.energy_value=tonumber(e_vlaue)
+gpu.set(screen_x-10,screen_y-2,'           ')
+gpu.setBackground(green)
+gpu.set(screen_x-10,screen_y-2,'切換:'.._G.energy_value..'M')
+gpu.setBackground(black)
+local file=io.open("energy.cfg","w")
+file:write('切換='.._G.energy_value)
+file:close()
+_G.thread1:resume()
+computer.pushSignal('Draw')
+break
 end
 end
 end
 end
-end
-if _G.thread ==nil then
+
+--[[if _G.thread ==nil then
 gpu.setBackground(green)
 gpu.setForeground(red)
 gpu.set(screen_x-34,screen_y," 通信控制 ")
