@@ -16,4 +16,3 @@ green= 0x008000
 screen_x,screen_y=screen_resolution()
 screen_x_half=screen_x/2
 screen_y_start=3
-endid={}
