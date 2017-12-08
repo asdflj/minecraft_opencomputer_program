@@ -130,7 +130,11 @@ if _G.energy.log_percentage[2] ~= nil then
 local eu =string.format("%0.0f",(_G.energy.msg[1]-_G.energy.msg[2]))
 --local s=math.ceil(_G.t[1])-math.floor(_G.t[2])
 local s=(_G.energy.t[1]-_G.energy.t[2])*20
+if  tonumber(eu) >0 then 
+gpu.set(2,screen_y-2,'当前能源状態  :+'..string.format("%0.0f",eu/s)..'eu/t'..'           ')
+else
 gpu.set(2,screen_y-2,'当前能源状態  :'..string.format("%0.0f",eu/s)..'eu/t'..'           ')
+end
 end
 local memory = computer.freeMemory()
 memory = math.modf(memory / 1000)
