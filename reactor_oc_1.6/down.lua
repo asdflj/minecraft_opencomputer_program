@@ -1,0 +1,6 @@
+local shell = require('shell')
+shell.execute('wget https://raw.githubusercontent.com/asdflj/minecraft_opencomputer_program/master/reactor_oc_1.6/reactor_server.lua')
+shell.execute('wget https://raw.githubusercontent.com/asdflj/minecraft_opencomputer_program/master/reactor_oc_1.6/DrawUI.lua')
+shell.execute('wget https://raw.githubusercontent.com/asdflj/minecraft_opencomputer_program/master/reactor_oc_1.6/lib/reactor_firstrun.lua /lib/reactor_firstrun.lua')
+shell.execute('wget https://raw.githubusercontent.com/asdflj/minecraft_opencomputer_program/master/reactor_oc_1.6/lib/public.lua /lib/public.lua')
+shell.execute('wget https://raw.githubusercontent.com/asdflj/minecraft_opencomputer_program/master/reactor_oc_1.6/lib/reactor_load.lua /lib/reactor_load.lua')
