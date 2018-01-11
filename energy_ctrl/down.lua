@@ -1,4 +1,8 @@
 local shell = require('shell')
+shell.execute('del energy_server.lua')
+shell.execute('del eUI.lua')
+shell.execute('del /lib/energy_firstrun.lua')
+shell.execute('del /lib/public.lua')
 shell.execute('wget https://raw.githubusercontent.com/asdflj/minecraft_opencomputer_program/master/energy_ctrl/energy_server.lua')
 shell.execute('wget https://raw.githubusercontent.com/asdflj/minecraft_opencomputer_program/master/energy_ctrl/eUI.lua')
 shell.execute('wget https://raw.githubusercontent.com/asdflj/minecraft_opencomputer_program/master/energy_ctrl/lib/energy_firstrun.lua /lib/energy_firstrun.lua')
