@@ -6,7 +6,7 @@ if #args < 1 then
   io.write("使其打開或停止")
   return
 end
-
+--[[
 ic2={}
 for address,name in pairs (component.list('ic2')) 
 do  
@@ -16,7 +16,7 @@ if not ic2[1] then
 print('沒發現儲電設備')
 return
 end
-
+]]--
 local thread = require("thread")
 local computer = require('computer')
 local event = require('event')
