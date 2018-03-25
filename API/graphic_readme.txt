@@ -2,7 +2,7 @@
 首先导入模块 
 local graphic=require('graphic')
 函数讲解
-init(x,y,r) 初始化幕布 x y 为大小，r 是刷新率 默认为3 大小不宜过大，否则会内存不足
+init(x,y,r) 初始化幕布 x y 为大小，r 是刷新率 默认为3 大小不宜过大，否则会内存不足 必运行 否则其他函数不起作用
 uninit() 卸载幕布，清理内存
 drawline(x_min,x_max,y,background_colour,foreground_colour,text,run)画一条线 x_min,x_max 为X轴的最小和最大值，
 y=y轴 background_colour=背景颜色 foreground_colour=字体颜色 text=文字 run=函数 
