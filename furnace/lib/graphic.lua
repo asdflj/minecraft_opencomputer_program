@@ -140,7 +140,7 @@ function ui.fill_background_colour(background_colour)
 		end
 	end
 end
-function ui.fill_foreground_colour(background_colour)
+function ui.fill_foreground_colour(foreground_colour)
 	for k,v in pairs(show_display) do
 		for k1,v1 in pairs(show_display[k])do
 			v1['foreground_colour']=foreground_colour
