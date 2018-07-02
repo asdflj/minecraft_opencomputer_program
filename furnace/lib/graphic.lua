@@ -82,6 +82,16 @@ local function mouse_scroll(__,__,__,__,r)
 		show_display_area['scroll']=show_display_area['scroll']-1
 	end
 end
+local function local_refresh(x_min,x_max,y)
+	local gpu = component.gpu
+	local now_foreground=gpu.getForeground()
+	local now_background=gpu.getBackground()
+	for x = x_min,x_max do 
+		gpu.setForeground(show_display[x][y]['foreground_color'])
+		gpu.setBackground(show_display[x][y]['background_color'])
+		gpu.set(x,y,show_display[x][y]['text'])
+	end
+end
 function ui.init(x,y,r)
 	show_display={}
 	display_pause=1
@@ -97,8 +107,8 @@ function ui.init(x,y,r)
 		table.insert(show_display,{})
 		for ii=1,y do
 			table.insert(show_display[i],{
-				background_colour=0x000000,
-				foreground_colour=0xFFFFFF,
+				background_color=0x000000,
+				foreground_color=0xFFFFFF,
 				text=' ',
 				run=nil
 			})		
@@ -121,10 +131,10 @@ function ui.uninit()
 		display_pause=0
 	end
 end
-function ui.drawline(x_min,x_max,y,background_colour,foreground_colour,text,run)
+function ui.drawline(x_min,x_max,y,background_color,foreground_color,text,run)
 	for x=x_min,x_max do
-		show_display[x][y]['background_colour']=background_colour
-		show_display[x][y]['foreground_colour']=foreground_colour
+		show_display[x][y]['background_color']=background_color
+		show_display[x][y]['foreground_color']=foreground_color
 		if text~=nil then 
 			show_display[x][y]['text']=text
 		end
@@ -133,17 +143,17 @@ function ui.drawline(x_min,x_max,y,background_colour,foreground_colour,text,run)
 		end
 	end
 end
-function ui.fill_background_colour(background_colour)
+function ui.fill_background_color(background_color)
 	for k,v in pairs(show_display) do
 		for k1,v1 in pairs(show_display[k])do
-			v1['background_colour']=background_colour
+			v1['background_color']=background_color
 		end
 	end
 end
-function ui.fill_foreground_colour(foreground_colour)
+function ui.fill_foreground_color(foreground_color)
 	for k,v in pairs(show_display) do
 		for k1,v1 in pairs(show_display[k])do
-			v1['foreground_colour']=foreground_colour
+			v1['foreground_color']=foreground_color
 		end
 	end
 end
@@ -161,13 +171,13 @@ function ui.setresolution(x,y)
 	show_display_area['y_min']=1
 	show_display_area['y_max']=y
 end
-function ui.draw_simple(x,y,background_colour,foreground_colour,text,run)
-	show_display[x][y]['background_colour']=background_colour
-	show_display[x][y]['foreground_colour']=foreground_colour
+function ui.draw_simple(x,y,background_color,foreground_color,text,run)
+	show_display[x][y]['background_color']=background_color
+	show_display[x][y]['foreground_color']=foreground_color
 	show_display[x][y]['text']=text
 	show_display[x][y]['run']=run
 end
-function ui.draw_text(x_min,x_max,y,text,alignment,run)
+function ui.draw_text(x_min,x_max,y,text,alignment,run,refresh)
 	txt=text_split(text)
 	s=1
 	jump=0
@@ -193,13 +203,16 @@ function ui.draw_text(x_min,x_max,y,text,alignment,run)
 		else
 			if show_display[x]~=nil then
 				show_display[x][y]['text']=' '
-				show_display[x][y]['background_colour']=show_display[x-1][y]['background_colour']
-				show_display[x][y]['foreground_colour']=show_display[x-1][y]['foreground_colour']
+				show_display[x][y]['background_color']=show_display[x-1][y]['background_color']
+				show_display[x][y]['foreground_color']=show_display[x-1][y]['foreground_color']
 				show_display[x][y]['run']=show_display[x-1][y]['run']
 			end
 			jump=0
 			s=s+1
 		end
+	end
+	if refresh ~= nil then
+		ui.local_refresh(x_min,x_max,y)
 	end
 end
 function ui.change_display_tab(file1,file2)
@@ -270,6 +283,7 @@ function ui.getdisplay_statu()
 	end
 end
 function ui.display_refresh()
+	local gpu = component.gpu
 	local now_foreground=gpu.getForeground()
 	local now_background=gpu.getBackground()
 	local x=1
@@ -277,8 +291,8 @@ function ui.display_refresh()
 		local y=1
 		for y_min=show_display_area['y_min'],show_display_area['y_max'] do
 			if show_display[x_min][y_min]~=nil then
-				gpu.setForeground(show_display[x_min][y_min]['foreground_colour'])
-				gpu.setBackground(show_display[x_min][y_min]['background_colour'])
+				gpu.setForeground(show_display[x_min][y_min]['foreground_color'])
+				gpu.setBackground(show_display[x_min][y_min]['background_color'])
 				gpu.set(x,y,show_display[x_min][y_min]['text'])
 			end
 		y=y+1

@@ -1,7 +1,7 @@
 --熔炉监控器 版本 alpha 0.1
 local component = require('component')
 local graphic=require('graphic')
-local colours =require('colours')
+local color =require('color')
 local thread = require("thread")
 local computer = require('computer')
 local event = require('event')
@@ -25,7 +25,7 @@ function furnace_monitor()
 		if statu=='component_removed' then
 			for k,v in pairs(furnace) do
 				if v==address then
-					graphic.drawline(1,50,#furnace+2,colours.black,colours.white,' ')
+					graphic.drawline(1,50,#furnace+2,color.black,color.white,' ')
 					table.remove(furnace,k)
 				end
 			end
@@ -47,13 +47,14 @@ function display()
 		a=proxy(v)
 		if a~= nil then
 			a_cooktime=a.getCookTime()
-			graphic.drawline(8,36,k1+2,colours.black,colours.white,' ')
+			graphic.drawline(8,36,k1+2,color.black,color.white,' ')
 			if math.floor(a_cooktime/8)~=0 then
-				graphic.drawline(8,8+math.floor(a_cooktime/8),k1+2,colours.red,colours.white,' ')
+				graphic.drawline(8,8+math.floor(a_cooktime/8),k1+2,color.red,color.white,' ')
 			end
-			graphic.draw_text(2,5,k1+2,string.sub(v,1,4),'left')
-			graphic.draw_text(37,42,k1+2,math.modf(a_cooktime/200*100)..' %','left')
-			graphic.draw_text(45,50,k1+2,tostring(a.isBurning()),'left')
+			graphic.draw_text(2,5,k1+2,string.sub(v,1,4),'left',nil,'true')
+			graphic.draw_text(37,42,k1+2,math.modf(a_cooktime/200*100)..' %','left',nil,'true')
+			graphic.draw_text(45,50,k1+2,tostring(a.isBurning()),'left',nil,'true') 
+			--启用新的局部刷新技术
 			k1=k1+1
 		end
 	end
@@ -70,7 +71,7 @@ computer.pushSignal('listen')
 --graphic.draw_pause()
 while true do
 display()
-graphic.display_refresh()
+-- graphic.display_refresh()
 os.sleep(1)
 end
 
