@@ -47,9 +47,9 @@ function display()
 		a=proxy(v)
 		if a~= nil then
 			a_cooktime=a.getCookTime()
-			graphic.drawline(8,36,k1+2,color.black,color.white,' ')
+			graphic.drawline(8,36,k1+2,color.black,color.white,' ',nil,'true')
 			if math.floor(a_cooktime/8)~=0 then
-				graphic.drawline(8,8+math.floor(a_cooktime/8),k1+2,color.red,color.white,' ')
+				graphic.drawline(8,8+math.floor(a_cooktime/8),k1+2,color.red,color.white,' ',nil,'true')
 			end
 			graphic.draw_text(2,5,k1+2,string.sub(v,1,4),'left',nil,'true')
 			graphic.draw_text(37,42,k1+2,math.modf(a_cooktime/200*100)..' %','left',nil,'true')
@@ -66,12 +66,12 @@ local y=16
 graphic.draw_text(1,50,1,'furnace','center',print_author)
 graphic.draw_text(1,50,2,' name          progress         Percentage  burn','left')
 furnace=find_furnace()
+graphic.display_refresh()
 event.listen('listen',listen)
 computer.pushSignal('listen')
 --graphic.draw_pause()
 while true do
 display()
 -- graphic.display_refresh()
-os.sleep(1)
 end
 

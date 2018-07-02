@@ -1,4 +1,4 @@
---版本 alpha 0.2
+--版本 alpha 0.3 添加局部刷新技术
 local component = require('component')
 local computer =require('computer')
 local event = require('event')
@@ -82,8 +82,7 @@ local function mouse_scroll(__,__,__,__,r)
 		show_display_area['scroll']=show_display_area['scroll']-1
 	end
 end
-local function local_refresh(x_min,x_max,y)
-	local gpu = component.gpu
+local function local_refresh(x_min,x_max,y,show_display,gpu)
 	local now_foreground=gpu.getForeground()
 	local now_background=gpu.getBackground()
 	for x = x_min,x_max do 
@@ -91,6 +90,8 @@ local function local_refresh(x_min,x_max,y)
 		gpu.setBackground(show_display[x][y]['background_color'])
 		gpu.set(x,y,show_display[x][y]['text'])
 	end
+	gpu.setForeground(now_foreground)
+	gpu.setBackground(now_background)
 end
 function ui.init(x,y,r)
 	show_display={}
@@ -131,7 +132,7 @@ function ui.uninit()
 		display_pause=0
 	end
 end
-function ui.drawline(x_min,x_max,y,background_color,foreground_color,text,run)
+function ui.drawline(x_min,x_max,y,background_color,foreground_color,text,run,refresh)
 	for x=x_min,x_max do
 		show_display[x][y]['background_color']=background_color
 		show_display[x][y]['foreground_color']=foreground_color
@@ -141,6 +142,9 @@ function ui.drawline(x_min,x_max,y,background_color,foreground_color,text,run)
 		if run~= nil then
 			show_display[x][y]['run']=run
 		end
+	end
+	if refresh ~= nil then
+		local_refresh(x_min,x_max,y,show_display,gpu)
 	end
 end
 function ui.fill_background_color(background_color)
@@ -212,7 +216,7 @@ function ui.draw_text(x_min,x_max,y,text,alignment,run,refresh)
 		end
 	end
 	if refresh ~= nil then
-		ui.local_refresh(x_min,x_max,y)
+		local_refresh(x_min,x_max,y,show_display,gpu)
 	end
 end
 function ui.change_display_tab(file1,file2)
