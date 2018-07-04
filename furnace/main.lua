@@ -21,17 +21,20 @@ local function find_furnace()
 end
 function furnace_monitor()
 	while true do
-		statu,address,item_type=event.pull('component')
-		if statu=='component_removed' then
-			for k,v in pairs(furnace) do
-				if v==address then
-					graphic.drawline(1,50,#furnace+2,color.black,color.white,' ')
-					table.remove(furnace,k)
+		pcall(function() 
+			statu,address,item_type=event.pull('component')
+			if statu=='component_removed' then
+				for k,v in pairs(furnace) do
+					if v==address then
+						graphic.drawline(1,50,#furnace+2,color.black,color.white,' ')
+						table.remove(furnace,k)
+					end
 				end
+			elseif statu=='component_added' and item_type == 'furnace' then
+				table.insert(furnace,address)
 			end
-		elseif statu=='component_added' and item_type == 'furnace' then
-			table.insert(furnace,address)
-		end
+		end)
+		graphic.display_refresh() --更新完后刷新
 	end
 end
 function listen()
@@ -42,22 +45,24 @@ function listen()
 	end
 end
 function display()
+	pcall(function() 
 		k1=1
-	for k,v in pairs(furnace) do
-		a=proxy(v)
-		if a~= nil then
-			a_cooktime=a.getCookTime()
-			graphic.drawline(8,36,k1+2,color.black,color.white,' ',nil,'true')
-			if math.floor(a_cooktime/8)~=0 then
-				graphic.drawline(8,8+math.floor(a_cooktime/8),k1+2,color.red,color.white,' ',nil,'true')
+		for k,v in pairs(furnace) do
+			a=proxy(v)
+			if a~= nil then
+				a_cooktime=a.getCookTime()
+				graphic.drawline(8,36,k1+2,color.black,color.white,' ',nil,'true')
+				if math.floor(a_cooktime/8)~=0 then
+					graphic.drawline(8,8+math.floor(a_cooktime/8),k1+2,color.red,color.white,' ',nil,'true')
+				end
+				graphic.draw_text(2,5,k1+2,string.sub(v,1,4),'left',nil,'true')
+				graphic.draw_text(37,42,k1+2,math.modf(a_cooktime/200*100)..' %','left',nil,'true')
+				graphic.draw_text(45,50,k1+2,tostring(a.isBurning()),'left',nil,'true') 
+				--启用新的局部刷新技术
+				k1=k1+1
 			end
-			graphic.draw_text(2,5,k1+2,string.sub(v,1,4),'left',nil,'true')
-			graphic.draw_text(37,42,k1+2,math.modf(a_cooktime/200*100)..' %','left',nil,'true')
-			graphic.draw_text(45,50,k1+2,tostring(a.isBurning()),'left',nil,'true') 
-			--启用新的局部刷新技术
-			k1=k1+1
 		end
-	end
+	end)
 end
 graphic.init(50,32,5) 
 graphic.setresolution(50,16)
