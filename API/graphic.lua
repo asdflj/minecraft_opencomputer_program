@@ -81,6 +81,7 @@ local function mouse_scroll(__,__,__,__,r)
 		show_display_area['y_max']=show_display_area['y_max']+1
 		show_display_area['scroll']=show_display_area['scroll']-1
 	end
+	refresh_screen() --刷新界面
 end
 local function local_refresh(x_min,x_max,y,show_display,gpu)
 	local now_foreground=gpu.getForeground()
